@@ -4,13 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.platinumdigitalgroup</groupId>
-    <artifactId>JVDF</artifactId>
+    <groupId>org.mikusch</groupId>
+    <artifactId>jvdf</artifactId>
     <version>1.8</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Mikusch Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Mikusch/JVDF</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
