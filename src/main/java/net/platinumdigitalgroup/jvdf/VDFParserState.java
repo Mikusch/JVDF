@@ -20,6 +20,7 @@ import java.util.Stack;
 
 /**
  * Holds the internal state of the VDF parser.
+ *
  * @author Brendan Heinonen
  */
 public class VDFParserState {
@@ -71,6 +72,7 @@ public class VDFParserState {
 
     /**
      * Initializes the parser state with a starting root node.
+     *
      * @param root an existing root node
      */
     public VDFParserState(VDFNode root) {
@@ -88,6 +90,7 @@ public class VDFParserState {
 
     /**
      * Returns the root VDFNode for this parser state.
+     *
      * @return the VDFNode representing the root of the VDF document
      */
     public VDFNode root() {
@@ -96,6 +99,7 @@ public class VDFParserState {
 
     /**
      * Returns the VDFNode the parser is currently on.
+     *
      * @return the VDFNode that the parser is currently writing key/values to
      */
     public VDFNode current() {
@@ -106,7 +110,7 @@ public class VDFParserState {
      * Handle a quote character.
      */
     public void quote() {
-        if(escapePending) {
+        if (escapePending) {
             // If there's an escape pending, this quote is escaped
             character('"');
         } else {
@@ -119,7 +123,7 @@ public class VDFParserState {
             } else {
                 // Otherwise, the string has been terminated
 
-                if(currentString.length() == 0)
+                if (currentString.isEmpty())
                     nullString = true;
 
                 // Simulate a space at the end of a quote
@@ -133,21 +137,20 @@ public class VDFParserState {
      */
     public void space() {
         // If we're inside a quoted string, append space to the current string
-        if(quoteState) {
+        if (quoteState) {
             character(' ');
         } else {
             // Ignore meaningless spaces
-            if(currentString.length() == 0 && !nullString)
+            if (currentString.isEmpty() && !nullString)
                 return;
 
             valuePending = !valuePending;
 
             // If valuePending was toggled to true, the last string was the key name
             // If valuePending was toggled to false, the last
-            if(valuePending) {
+            if (valuePending) {
                 // Store the key name
                 keyName = currentString.toString();
-                //System.out.println(keyName);
             } else {
                 // Store the value into the current node
                 currentValue(keyName, currentString.toString());
@@ -165,19 +168,20 @@ public class VDFParserState {
         escapePending = !escapePending;
 
         // If escape was just disabled, we know that this character must be \, which is the escape sequence \\
-        if(!escapePending) {
+        if (!escapePending) {
             character('\\');
         }
     }
 
     /**
      * Handle a miscellaneous non-control character.
+     *
      * @param c a non-control character
      */
     public void character(char c) {
         // Check specced escape sequence
-        if(escapePending) {
-            if(c == 'n')
+        if (escapePending) {
+            if (c == 'n')
                 c = '\n';
         }
 
@@ -192,7 +196,7 @@ public class VDFParserState {
      * Start a subnode context.
      */
     public void beginSubNode() {
-        if(escapePending || quoteState) {
+        if (escapePending || quoteState) {
             character('{');
         } else {
             // Create new subnode
@@ -212,7 +216,7 @@ public class VDFParserState {
      * End a subnode context.
      */
     public void endSubNode() {
-        if(escapePending || quoteState) {
+        if (escapePending || quoteState) {
             character('}');
         } else {
             // At this point, we're done adding key/values, so reset the string buffer and KV state
@@ -233,7 +237,7 @@ public class VDFParserState {
         // Call space to commit the current KV pair
         space();
 
-        if(childStack.peek() != rootNode) {
+        if (childStack.peek() != rootNode) {
             throw new VDFParseException("The root node was not at the top of the stack at the end of parsing. " +
                     "There was a subnode mismatch (misplaced '{'?)");
         }
@@ -241,6 +245,7 @@ public class VDFParserState {
 
     /**
      * Pushes a key/value pair to the current node.
+     *
      * @param key the key
      * @param val the value
      */
@@ -263,5 +268,4 @@ public class VDFParserState {
         resetString();
         valuePending = false;
     }
-
 }

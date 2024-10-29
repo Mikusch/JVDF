@@ -29,5 +29,4 @@ import java.lang.annotation.Target;
 public @interface VDFBindField {
 
     String keyName() default "";
-
 }

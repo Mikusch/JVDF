@@ -4,13 +4,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Writes multiple VDF nodes into a human readable String.
+ * Writes multiple VDF nodes into a human-readable String.
+ *
  * @author AreteS0ftware
  */
 public class VDFWriter {
-
-    public VDFWriter() {
-    }
 
     public String write(VDFNode root) {
         return write(root, false);
@@ -30,14 +28,12 @@ public class VDFWriter {
                 builder.append("\"").append(key).append("\"");
                 builder.append(" ");
                 Object obj = value[i];
-                if (!(obj instanceof VDFNode)) {
+                if (!(obj instanceof VDFNode node)) {
                     builder.append("\"").append(obj).append("\"");
                     if (i < value.length - 1) {
                         builder.append("\n");
                     }
-                }
-                else {
-                    VDFNode node = (VDFNode) obj;
+                } else {
                     if (newLineOnNode) {
                         builder.append("\n");
                         builder.append(whitespace);
@@ -59,5 +55,4 @@ public class VDFWriter {
         }
         return builder.toString();
     }
-
 }
