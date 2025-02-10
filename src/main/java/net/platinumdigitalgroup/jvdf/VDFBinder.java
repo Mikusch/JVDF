@@ -64,7 +64,7 @@ public class VDFBinder {
     public void bindField(Object obj, Field f) {
         VDFBindField annotation = f.getAnnotation(VDFBindField.class);
 
-        String keyName = annotation.keyName();
+        String keyName = annotation.value();
 
         // If the annotation keyname is not defined, use the field's name as the key
         if (keyName.isEmpty()) {

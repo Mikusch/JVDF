@@ -24,10 +24,10 @@ public class TestBinder {
     }
 
     private class NamedPOJO {
-        @VDFBindField(keyName = "key_name")
+        @VDFBindField("key_name")
         public String key;
 
-        @VDFBindField(keyName = "second_key")
+        @VDFBindField("second_key")
         public String secondKey;
     }
 

@@ -28,5 +28,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface VDFBindField {
 
-    String keyName() default "";
+    String value() default "";
 }
