@@ -23,20 +23,22 @@ import java.util.TreeMap;
 
 /**
  * An iterable tree structure that represents a set of key-value pairs in a VDF document.
+ *
  * @author Brendan Heinonen
  */
 public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Puts a key/value pair into the map, or push it to the back of the multimap
-     * @param key the key of the value
+     *
+     * @param key   the key of the value
      * @param value the value which corresponds to the key
      * @return the value
      */
     public Object put(String key, Object value) {
         Object[] values = this.get(key);
-        if(values == null) {
-            this.put(key, new Object[]{ value });
+        if (values == null) {
+            this.put(key, new Object[]{value});
         } else {
             Object[] appendTo = Arrays.copyOf(values, values.length + 1);
             appendTo[values.length] = value;
@@ -47,19 +49,21 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Returns the number of values that correspond to the specified key.
+     *
      * @param key the key name to get the value count for
      * @return the number of values that correspond to the key
      */
     public int values(String key) {
         Object[] values = this.get(key);
-        if(values == null)
+        if (values == null)
             return 0;
         return values.length;
     }
 
     /**
      * Fetches a string value by name and index.
-     * @param key the key name
+     *
+     * @param key   the key name
      * @param index the nth key
      * @return the string value of the specified key, or null if the key does not exist in this node
      */
@@ -69,11 +73,12 @@ public class VDFNode extends TreeMap<String, Object[]> {
     }
 
     /**
-     * Fetches an String value by name.
-     * @param key the key name
+     * Fetches a String value by name.
+     *
+     * @param key          the key name
      * @param defaultValue the String value to return if the key does not exist in this node
      * @return the String value of the specified key, or the default value if the key does not exist in this node
-     * */
+     */
     public String getString(String key, String defaultValue) {
         String value = getString(key, 0);
         return value != null ? value : defaultValue;
@@ -81,6 +86,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a string value by name.
+     *
      * @param key the key name
      * @return the string value of the specified key, or null if the key does not exist in this node
      */
@@ -90,6 +96,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches an integer value by name.
+     *
      * @param key the key name
      * @return the int value of the specified key, or 0 if the key does not exist in this node
      */
@@ -99,10 +106,11 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches an integer value by name.
-     * @param key the key name
+     *
+     * @param key          the key name
      * @param defaultValue the int value to return if the key does not exist in this node
      * @return the int value of the specified key, or the default value if the key does not exist in this node
-     * */
+     */
     public int getInt(String key, int defaultValue) {
         String value = getString(key);
         return value != null ? Integer.parseInt(value) : defaultValue;
@@ -110,6 +118,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a float value by name.
+     *
      * @param key the key name
      * @return the float value of the specified key, or 0 if the key does not exist in this node
      */
@@ -119,7 +128,8 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a float value by name.
-     * @param key the key name
+     *
+     * @param key          the key name
      * @param defaultValue the float value to return if the key does not exist in this node
      * @return the float value of the specified key, or the default value if the key does not exist in this node
      */
@@ -130,6 +140,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a long value by name.
+     *
      * @param key the key name
      * @return the long value of the specified key, or 0 if the key does not exist in this node
      */
@@ -139,7 +150,8 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a long value by name.
-     * @param key the key name
+     *
+     * @param key          the key name
      * @param defaultValue the long value to return if the key does not exist in this node
      * @return the long value of the specified key, or the default value if the key does not exist in this node
      */
@@ -150,6 +162,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a pointer value by name.  Java does not have pointers, so this will really return a long.
+     *
      * @param key the key name
      * @return the long value of the specified key, or 0 if the key does not exist in this node
      */
@@ -159,6 +172,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Proxy for getString for spec compliance reasons.
+     *
      * @param key the key name
      * @return the string value of the specified key, or null if the key does not exist in this node
      */
@@ -168,6 +182,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a color value by name.
+     *
      * @param key the key name
      * @return the AWT color value of the specified key, or null if the key does not exist in this node
      */
@@ -182,6 +197,7 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a VDF child node by name.
+     *
      * @param key the key name
      * @return a VDFNode instance of the specified key, or null if the key does not exist in this node
      */
@@ -191,16 +207,18 @@ public class VDFNode extends TreeMap<String, Object[]> {
 
     /**
      * Fetches a VDF child node by name and index.
-     * @param key the key name
+     *
+     * @param key   the key name
      * @param index the nth key
      * @return a VDFNode instance of the specified key, or null if the key does not exist in this node
      */
     public VDFNode getSubNode(String key, int index) {
-        return (VDFNode)this.get(key)[index];
+        return (VDFNode) this.get(key)[index];
     }
 
     /**
      * Reduces multimapped keys into a single key.
+     *
      * @param recursive if subnodes should be reduced as well
      * @return this
      */
@@ -217,44 +235,44 @@ public class VDFNode extends TreeMap<String, Object[]> {
         Object[] nodes = entry.getValue();
 
         // The first value becomes the node that we're joining
-        VDFNode newNode = (VDFNode)nodes[0];
+        VDFNode newNode = (VDFNode) nodes[0];
 
         // If recursion is enabled, we need to reduce every subnode
         if (recursive)
             newNode.reduce(true);
 
-        if(nodes.length <= 1)
+        if (nodes.length == 1)
             return;
 
 
         for (int i = 1, nodesLength = nodes.length; i < nodesLength; i++) {
-            VDFNode node = (VDFNode)nodes[i];
+            VDFNode node = (VDFNode) nodes[i];
 
             // Merge this node into the new node
             node.join(newNode);
         }
 
-        this.put(entry.getKey(), new Object[] { newNode });
+        this.put(entry.getKey(), new Object[]{newNode});
     }
 
     /**
      * Put the key/value pairs in this node into another node.
+     *
      * @param other the node to merge into
      */
     public void join(VDFNode other) {
-        for(Map.Entry<String, Object[]> e : this.entrySet()) {
-            for(Object o : e.getValue())
+        for (Map.Entry<String, Object[]> e : this.entrySet()) {
+            for (Object o : e.getValue())
                 other.put(e.getKey(), o);
         }
     }
 
     /**
      * Recursively reduces multimapped keys into single keys.
+     *
      * @return this
      */
     public VDFNode reduce() {
         return reduce(true);
     }
-
-
 }

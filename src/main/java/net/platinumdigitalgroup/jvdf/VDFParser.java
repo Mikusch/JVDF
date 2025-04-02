@@ -16,8 +16,13 @@ limitations under the License.
 
 package net.platinumdigitalgroup.jvdf;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /**
  * Parses VDF documents into iterable tree structures.
+ *
  * @author Brendan Heinonen
  */
 public class VDFParser {
@@ -26,6 +31,7 @@ public class VDFParser {
 
     /**
      * Initializes the VDFParser with a specific preprocessor
+     *
      * @param preprocessor the preprocessor to process input strings with
      */
     public VDFParser(VDFPreprocessor preprocessor) {
@@ -41,6 +47,7 @@ public class VDFParser {
 
     /**
      * Parses a VDF document.
+     *
      * @param vdf the VDF document to parse
      * @return a VDFNode which represents the root of the VDF document
      */
@@ -50,6 +57,7 @@ public class VDFParser {
 
     /**
      * Parses a VDF document
+     *
      * @param vdf an array of lines representing a VDF document to parse
      * @return a VDFNode which represents the node of the VDF document
      */
@@ -58,32 +66,18 @@ public class VDFParser {
         VDFParserState state = new VDFParserState();
 
         char[] arr = processed.toCharArray();
-        for(char c : arr) {
+        for (char c : arr) {
             switch (c) {
-                case '"':
-                    state.quote();
-                    break;
-                case ' ':
-                    state.space();
-                    break;
-                case '\\':
-                    state.escape();
-                    break;
-                case '{':
-                    state.beginSubNode();
-                    break;
-                case '}':
-                    state.endSubNode();
-                    break;
-                default:
-                    state.character(c);
-                    break;
+                case '"' -> state.quote();
+                case ' ' -> state.space();
+                case '\\' -> state.escape();
+                case '{' -> state.beginSubNode();
+                case '}' -> state.endSubNode();
+                default -> state.character(c);
             }
         }
         state.endParse();
 
         return state.root();
     }
-
-
 }

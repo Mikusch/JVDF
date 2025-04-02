@@ -4,15 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.platinumdigitalgroup</groupId>
-    <artifactId>JVDF</artifactId>
-    <version>1.7</version>
+    <groupId>org.mikusch</groupId>
+    <artifactId>jvdf</artifactId>
+    <version>1.8</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Mikusch Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Mikusch/JVDF</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.12.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -22,13 +34,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-
 </project>

@@ -51,7 +51,7 @@ node.getSubNode("root_node")
 ```
 
 class DocumentNode {
-    @VDFBindField(keyName = "root_node")
+    @VDFBindField("root_node")
     RootNode root;
     
     @VDFBindField
@@ -65,7 +65,7 @@ class RootNode {
     @VDFBindField
     String key3;
     
-    @VDFBindField(keyName = "child_node")
+    @VDFBindField("child_node")
     ChildNode childNode;
 }
 
@@ -73,7 +73,7 @@ class ChildNode {
     @VDFBindField
     String child1;
     
-    @VDFBindField(keyName = "child2")
+    @VDFBindField("child2")
     String unrelated;   // note the annotation above binds this to "child2"
 }
 

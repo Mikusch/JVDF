@@ -22,13 +22,15 @@ import java.util.stream.IntStream;
  * The VDF preprocessor transforms valid, human-readable VDF into minified, less-than-humanly readable VDF that is
  * more easily parsed.  This two-stage process allows for far easier parallelization, as each line can be mapped to a
  * worker thread.
+ *
  * @author Brendan Heinonen
  */
 public class VDFPreprocessor {
 
     /**
      * Preprocesses a VDF document into a minified, less-than-humanly readable, but still valid VDF document with
-     * comments and unnecessary whitepsaces removed..
+     * comments and unnecessary whitespaces removed.
+     *
      * @param vdf the VDF document to process
      * @return a VDF document transformed from the input document
      */
@@ -38,7 +40,8 @@ public class VDFPreprocessor {
 
     /**
      * Preprocesses a VDF document into a minified, less-than-humanly readable, but still valid VDF document with
-     * comments and unnecessary whitepsaces removed..
+     * comments and unnecessary whitespaces removed.
+     *
      * @param lines an array of lines of a VDF document to process
      * @return a VDF document transformed from the input document
      */
@@ -50,10 +53,10 @@ public class VDFPreprocessor {
         StringBuilder builder = new StringBuilder(lines.length * 20);
         for (int i = 0, linesLength = lines.length; i < linesLength; i++) {
             String s = lines[i];
-            if (s != null && s.length() > 0) {
+            if (s != null && !s.isEmpty()) {
                 builder.append(s);
 
-                if(i < linesLength - 1)
+                if (i < linesLength - 1)
                     builder.append(" ");
             }
         }
@@ -62,6 +65,7 @@ public class VDFPreprocessor {
 
     /**
      * Preprocesses an array of lines in a VDF document, and stores the resultant processed lines back into the array.
+     *
      * @param lines the lines to process
      */
     public void processLines(String[] lines) {
@@ -72,6 +76,7 @@ public class VDFPreprocessor {
 
     /**
      * Preprocesses a single line in a VDF document.
+     *
      * @param line the original line to process
      * @return the line after it has been processed
      */
@@ -87,7 +92,7 @@ public class VDFPreprocessor {
         char[] charArray = line.toCharArray();
 
         // If the first characters of a line are a comment, we can immediately discard it
-        if(charArray.length >= 2 && isComment(charArray, 0)) {
+        if (charArray.length >= 2 && isComment(charArray, 0)) {
             return null;
         }
 
@@ -105,20 +110,20 @@ public class VDFPreprocessor {
             boolean hasNext = i < charArrayLength - 1;
             boolean hasPrevious = i > 0;
 
-            if(c == '\n' || c == '\r')
+            if (c == '\n' || c == '\r')
                 continue;
 
-            if(hasPrevious)
+            if (hasPrevious)
                 p = charArray[i - 1];
 
 
             // Toggle open quote flag if we've encountered an unescaped quote
-            if((c == '"' && !hasPrevious) || (hasPrevious && c == '"' && p != '\\'))
+            if ((c == '"' && !hasPrevious) || (hasPrevious && c == '"' && p != '\\'))
                 openQuotes = !openQuotes;
 
 
             // Strip C-style comments
-            if(hasNext) {
+            if (hasNext) {
                 n = charArray[i + 1];
 
                 // If we're not in quotes and this is a comment, immediately return from this line
@@ -128,20 +133,20 @@ public class VDFPreprocessor {
             }
 
             // Strip conditional statement
-            if(!openQuotes && c == '[')
+            if (!openQuotes && c == '[')
                 return sb.toString();
 
             // Strip whitespace
-            if(isWhitespace(c)) {
+            if (isWhitespace(c)) {
 
-                if(!hitWord) {
+                if (!hitWord) {
                     // If we haven't hit a word character yet, don't include this whitespace
                     // This essentially trims whitespace from the beginning of the line
                     continue;
                 } else {
 
                     // Skip whitespace characters in between words
-                    if(hasNext && isWhitespace(n)) {
+                    if (hasNext && isWhitespace(n)) {
                         continue;
                     }
 
@@ -149,13 +154,15 @@ public class VDFPreprocessor {
                     boolean brk = false;
 
                     // Iterate the rest of the line. If it hits a non-whitespace character, it will break.
-                    for(int j = i; j < charArrayLength && isWhitespace(charArray[j]); j++) {
+                    for (int j = i; j < charArrayLength && isWhitespace(charArray[j]); j++) {
                         // If we've made it to the end, that means the rest of the line is whitespace
-                        if(j == charArrayLength - 1)
+                        if (j == charArrayLength - 1) {
                             brk = true;
+                            break;
+                        }
                     }
 
-                    if(brk)
+                    if (brk)
                         break;
                 }
 
@@ -173,9 +180,10 @@ public class VDFPreprocessor {
     }
 
     /**
-     * Determines whether or not a character sequence is a VDF comment.  VDF comments are C-style comments, except that
+     * Determines whether a character sequence is a VDF comment.  VDF comments are C-style comments, except that
      * the comment will always take up the entire rest of the line. For that reason, block termination does not need to
      * be checked.
+     *
      * @param f the first character to test
      * @param s the second character to test, which must be immediately after f
      * @return if the two characters represent a VDF, C-style comment
@@ -188,14 +196,14 @@ public class VDFPreprocessor {
     }
 
     /**
-     * Determines whether or not a character is considered a VDF whitespace character. According to the VDF spec,
+     * Determines whether a character is considered a VDF whitespace character. According to the VDF spec,
      * whitespace characters include space, return, newline, and tab. Since the preprocessor will immediately strip
      * newline/returns, only space, tab, and vertical tab need be checked.
+     *
      * @param c the character to test
      * @return if the character is considered VDF whitespace character
      */
     private boolean isWhitespace(char c) {
         return c == ' ' || c == '\t' || c == 0x0B;
     }
-
 }

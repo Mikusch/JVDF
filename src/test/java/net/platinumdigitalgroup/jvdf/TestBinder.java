@@ -1,14 +1,15 @@
 package net.platinumdigitalgroup.jvdf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Brendan Heinonen
  */
 public class TestBinder {
 
-    private VDFParser parser = new VDFParser();
+    private final VDFParser parser = new VDFParser();
 
     private class SimplePOJO {
         @VDFBindField
@@ -19,14 +20,14 @@ public class TestBinder {
     public void testSimpleBinder() {
         SimplePOJO pojo = new SimplePOJO();
         new VDFBinder(parser.parse("key value")).bindTo(pojo);
-        Assert.assertEquals("value", pojo.key);
+        assertEquals("value", pojo.key);
     }
 
     private class NamedPOJO {
-        @VDFBindField(keyName = "key_name")
+        @VDFBindField("key_name")
         public String key;
 
-        @VDFBindField(keyName = "second_key")
+        @VDFBindField("second_key")
         public String secondKey;
     }
 
@@ -34,8 +35,8 @@ public class TestBinder {
     public void testNamedBinder() {
         NamedPOJO pojo = new NamedPOJO();
         new VDFBinder(parser.parse("key_name value second_key value2")).bindTo(pojo);
-        Assert.assertEquals("value", pojo.key);
-        Assert.assertEquals("value2", pojo.secondKey);
+        assertEquals("value", pojo.key);
+        assertEquals("value2", pojo.secondKey);
     }
 
     private class TypedPOJO {
@@ -56,10 +57,10 @@ public class TestBinder {
     public void testTypedBinder() {
         TypedPOJO pojo = new TypedPOJO();
         new VDFBinder(parser.parse("bint 123 bfloat 1.23 blong 123 string \"made it\"")).bindTo(pojo);
-        Assert.assertEquals("made it", pojo.string);
-        Assert.assertEquals(123, pojo.bint);
-        Assert.assertEquals(1.23f, pojo.bfloat, 0.1f);
-        Assert.assertEquals(123L, pojo.blong);
+        assertEquals("made it", pojo.string);
+        assertEquals(123, pojo.bint);
+        assertEquals(1.23f, pojo.bfloat, 0.1f);
+        assertEquals(123L, pojo.blong);
     }
 
 
@@ -83,7 +84,7 @@ public class TestBinder {
         RecursivePOJO pojo = new RecursivePOJO();
 
         new VDFBinder(parser.parse("root { child { key value } }")).bindTo(pojo);
-        Assert.assertEquals("value", pojo.root.child.key);
+        assertEquals("value", pojo.root.child.key);
     }
 
 }

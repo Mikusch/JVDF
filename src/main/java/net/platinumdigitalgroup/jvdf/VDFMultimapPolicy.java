@@ -2,6 +2,7 @@ package net.platinumdigitalgroup.jvdf;
 
 /**
  * Describes what the parser should do when it encounters a multimapped key.
+ *
  * @author Brendan Heinonen
  */
 public enum VDFMultimapPolicy {
@@ -30,5 +31,4 @@ public enum VDFMultimapPolicy {
      * Reduce keys at the very end of parsing.
      */
     AUTO_REDUCE_END
-
 }

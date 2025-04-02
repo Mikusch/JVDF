@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 /**
  * Binds VDF documents to Java objects.
+ *
  * @author Brendan Heinonen
  */
 public class VDFBinder {
@@ -33,6 +34,7 @@ public class VDFBinder {
 
     /**
      * Initializes the VDF binder with a VDF root node.
+     *
      * @param root the VDF root node
      */
     public VDFBinder(VDFNode root) {
@@ -41,6 +43,7 @@ public class VDFBinder {
 
     /**
      * Binds the root node to the specified POJO object.
+     *
      * @param obj the POJO to bind the VDF node to
      */
     public void bindTo(Object obj) {
@@ -55,39 +58,41 @@ public class VDFBinder {
 
     /**
      * Binds the VDF node to a field
+     *
      * @param f the field to bind
      */
     public void bindField(Object obj, Field f) {
         VDFBindField annotation = f.getAnnotation(VDFBindField.class);
 
-        String keyName = annotation.keyName();
+        String keyName = annotation.value();
 
         // If the annotation keyname is not defined, use the field's name as the key
-        if(keyName.length() == 0) {
+        if (keyName.isEmpty()) {
             keyName = f.getName();
         }
 
-        if(!rootNode.containsKey(keyName))
+        if (!rootNode.containsKey(keyName))
             return;
 
         try {
             Type t = f.getType();
-            if(t == String.class) {
+            if (t == String.class) {
                 bindString(obj, f, keyName);
-            } else if(t == VDFNode.class) {
+            } else if (t == VDFNode.class) {
                 bindNodeSimple(obj, f, keyName);
-            } else if(t == int.class) {
+            } else if (t == int.class) {
                 bindInt(obj, f, keyName);
-            } else if(t == float.class) {
+            } else if (t == float.class) {
                 bindFloat(obj, f, keyName);
-            } else if(t == long.class) {
+            } else if (t == long.class) {
                 bindLong(obj, f, keyName);
-            } else if(t == Color.class) {
+            } else if (t == Color.class) {
                 bindColor(obj, f, keyName);
             } else {
                 bindNode(obj, f, keyName);
             }
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException |
+                 InvocationTargetException ex) {
             ex.printStackTrace();
         }
     }
@@ -107,17 +112,13 @@ public class VDFBinder {
     private Object createType(Object parent, Class<?> type)
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
-        if(type.isMemberClass()) {
+        if (type.isMemberClass()) {
             Class<?> parentType = type.getDeclaringClass();
             Constructor<?> ctor = type.getDeclaredConstructor(parentType);
 
-            if(ctor != null) {
-                return ctor.newInstance(parent);
-            }
-
-            return null;
+            return ctor.newInstance(parent);
         } else {
-            return type.newInstance();
+            return type.getDeclaredConstructor().newInstance();
         }
     }
 
@@ -144,5 +145,4 @@ public class VDFBinder {
     private void bindColor(Object obj, Field f, String key) throws IllegalAccessException {
         f.set(obj, rootNode.getColor(key));
     }
-
 }
